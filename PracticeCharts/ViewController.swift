@@ -9,7 +9,7 @@
 import UIKit
 import Charts
 
-class ViewController: UIViewController{
+class ViewController: UIViewController,ChartViewDelegate {
     
 
     // AQUI ELE CRIA A VIEW PRO GRAFICO
@@ -28,7 +28,7 @@ class ViewController: UIViewController{
         chartView.center = view.center
         //NO DATA TEXT OCORRE QUANDO NAO TEM DADOS NO GRAFICO
         chartView.noDataText = "You need to enter some data"
-        
+        chartView.delegate = self
         chartView.animate(xAxisDuration: 1)
         view.addSubview(chartView)
         setChart(categorias, values: gastos)
@@ -59,6 +59,12 @@ class ViewController: UIViewController{
         chartView.data = chartData
     
         
+    }
+    
+    // FUNCAO CHAMADA QUANDO CLICAMOS EM CIMA DE UM PEDACO DA PIZZA
+    
+    func chartValueSelected(chartView: ChartViewBase, entry: ChartDataEntry, dataSetIndex: Int, highlight: ChartHighlight) {
+        print("\(entry.value) in \(categorias[entry.xIndex])")
     }
 
     override func didReceiveMemoryWarning() {
