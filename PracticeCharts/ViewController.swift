@@ -7,12 +7,58 @@
 //
 
 import UIKit
+import Charts
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
+    
 
+    // AQUI ELE CRIA A VIEW PRO GRAFICO
+    let chartView = PieChartView(frame: CGRectMake(0, 22, 400, 400))
+    var categorias: [String]!
+    var gastos: [Double]!
+    
     override func viewDidLoad() {
+        categorias = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        gastos = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0, 4.0, 18.0, 2.0, 4.0, 5.0, 4.0]
+
+        
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        chartView.center = view.center
+        //NO DATA TEXT OCORRE QUANDO NAO TEM DADOS NO GRAFICO
+        chartView.noDataText = "You need to enter some data"
+        
+        chartView.animate(xAxisDuration: 1)
+        view.addSubview(chartView)
+        setChart(categorias, values: gastos)
+    }
+    
+    //FUNCAO QUE SETTA TODO O GRAFICO
+    func setChart(dataPoints: [String], values: [Double]) {
+        
+        chartView.noDataText = "You need to provide data for the chart."
+        chartView.descriptionText = "Tamo quase lá!"
+
+        var dataEntries: [ChartDataEntry] = []
+        //ESSE FOR PREENCHE O VETOR DE ENTRADA DE DADOS, PRA CADA INDEX,
+        for i in 0..<dataPoints.count {
+
+            let dataEntry = ChartDataEntry(value: values[i], xIndex: i)
+            
+            dataEntries.append(dataEntry)
+        }
+        
+        //ISSO EU NAO ENTENDI MUITO BEM MAS FUNCIONA
+        let chartDataSet = PieChartDataSet(yVals: dataEntries, label: "")
+
+        chartDataSet.colors = ChartColorTemplates.liberty()
+        
+        
+        let chartData = PieChartData(xVals: dataPoints, dataSet: chartDataSet)
+        chartView.data = chartData
+    
+        
     }
 
     override func didReceiveMemoryWarning() {
